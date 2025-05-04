@@ -399,11 +399,157 @@
 // };
 
 // export default Recommendations;
+// import React, { useState } from 'react';
+// // MUI
+// import {
+//     Container, Grid, FormLabel, Typography, Slider, Box,
+//     Select, MenuItem, Checkbox, ListItemText, InputLabel, OutlinedInput
+// } from '@mui/material';
+// import ProductCard from './Components/ProductCard';
+// import { useLocation } from 'react-router';
+
+// const Recommendations = () => {
+//     const { state } = useLocation();
+//     const { data } = state;
+//     const { general, makeup } = data;
+
+//     // ✅ Price Slider Logic
+//     const allPrices = [
+//         ...Object.values(general).flat().map(p => parseInt(p.price.replace(/[^\d]/g, ''))),
+//         ...makeup.map(p => parseInt(p.price.replace(/[^\d]/g, '')))
+//     ];
+//     const minPrice = Math.min(...allPrices);
+//     const maxPrice = Math.max(...allPrices);
+//     const [priceRange, setPriceRange] = useState([minPrice, maxPrice]);
+
+//     const handlePriceChange = (event, newValue) => {
+//         setPriceRange(newValue);
+//     };
+
+//     // ✅ Brand Filter Logic (multi-select)
+//     const allBrands = [...Object.values(general).flat(), ...makeup]
+//         .map(p => p.brand.toLowerCase())
+//         .filter((v, i, a) => a.indexOf(v) === i); // unique brands
+
+//     const [selectedBrands, setSelectedBrands] = useState([]);
+
+//     const handleBrandChange = (event) => {
+//         const { value } = event.target;
+//         setSelectedBrands(typeof value === 'string' ? value.split(',') : value);
+//     };
+
+//     const filterProducts = (product) => {
+//         const price = parseInt(product.price.replace(/[^\d]/g, ''));
+//         const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand.toLowerCase());
+//         return price >= priceRange[0] && price <= priceRange[1] && brandMatch;
+//     };
+
+//     return (
+//         <Container sx={{ marginTop: "2vh", padding: 3 }} alignitems="center" width="inherit">
+//             {/* ✅ Price Slider UI */}
+//             <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
+//                 <Typography variant="h6" gutterBottom>
+//                     Filter by Price: ₹{priceRange[0]} - ₹{priceRange[1]}
+//                 </Typography>
+//                 <Slider
+//                     value={priceRange}
+//                     onChange={handlePriceChange}
+//                     valueLabelDisplay="auto"
+//                     valueLabelFormat={(value) => `₹${value}`}
+//                     min={minPrice}
+//                     max={maxPrice}
+//                     sx={{
+//                         color: '#1976d2',
+//                         '& .MuiSlider-rail': { backgroundColor: '#e0e0e0' },
+//                         '& .MuiSlider-track': { backgroundColor: '#1976d2' },
+//                         '& .MuiSlider-thumb': { backgroundColor: '#1976d2' }
+//                     }}
+//                 />
+//             </Box>
+
+//             {/* ✅ Multi-Select Brand Dropdown */}
+//             <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
+//                 <FormLabel component="legend" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+//                     Filter by Brands:
+//                 </FormLabel>
+//                 <Select
+//                     multiple
+//                     value={selectedBrands}
+//                     onChange={handleBrandChange}
+//                     input={<OutlinedInput label="Brands" />}
+//                     renderValue={(selected) => selected.join(', ')}
+//                     fullWidth
+//                     sx={{
+//                         '& .MuiSelect-root': {
+//                             backgroundColor: '#f5f5f5',
+//                             borderRadius: '8px',
+//                             padding: '10px'
+//                         }
+//                     }}
+//                 >
+//                     {allBrands.map((brand) => (
+//                         <MenuItem key={brand} value={brand}>
+//                             <Checkbox checked={selectedBrands.indexOf(brand) > -1} />
+//                             <ListItemText primary={brand.charAt(0).toUpperCase() + brand.slice(1)} />
+//                         </MenuItem>
+//                     ))}
+//                 </Select>
+//             </Box>
+
+//             {/* ✅ General Products */}
+//             <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
+//                 Skin care
+//             </Typography>
+//             {Object.keys(general).map((type) => (
+//                 <div key={type}>
+//                     <Typography gutterBottom variant="h5" component="div" marginTop="2vh" color="text.secondary" textAlign="center">
+//                         {type}
+//                     </Typography>
+//                     <Grid container spacing={2} justifyContent="center">
+//                         {general[type].filter(filterProducts).slice(0, 4).map((prod, index) => (
+//                             <Grid item xs={6} md={3} key={index}>
+//                                 <ProductCard
+//                                     name={prod.name}
+//                                     brand={prod.brand}
+//                                     image={prod.img}
+//                                     price={prod.price}
+//                                     url={prod.url}
+//                                     concern={prod.concern}
+//                                 />
+//                             </Grid>
+//                         ))}
+//                     </Grid>
+//                 </div>
+//             ))}
+
+//             {/* ✅ Makeup Products */}
+//             <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
+//                 Make up
+//             </Typography>
+//             <Grid container spacing={2} justifyContent="center">
+//                 {makeup.filter(filterProducts).map((prod, index) => (
+//                     <Grid item xs={6} md={3} key={index}>
+//                         <ProductCard
+//                             name={prod.name}
+//                             brand={prod.brand}
+//                             image={prod.img}
+//                             price={prod.price}
+//                             url={prod.url}
+//                             concern={prod.concern}
+//                         />
+//                     </Grid>
+//                 ))}
+//             </Grid>
+//         </Container>
+//     );
+// };
+
+// export default Recommendations;
 import React, { useState } from 'react';
 // MUI
 import {
     Container, Grid, FormLabel, Typography, Slider, Box,
-    Select, MenuItem, Checkbox, ListItemText, InputLabel, OutlinedInput
+    Select, MenuItem, Checkbox, ListItemText, OutlinedInput
 } from '@mui/material';
 import ProductCard from './Components/ProductCard';
 import { useLocation } from 'react-router';
@@ -416,7 +562,7 @@ const Recommendations = () => {
     // ✅ Price Slider Logic
     const allPrices = [
         ...Object.values(general).flat().map(p => parseInt(p.price.replace(/[^\d]/g, ''))),
-        ...makeup.map(p => parseInt(p.price.replace(/[^\d]/g, '')))
+        ...makeup.map(p => parseInt(p.price.replace(/[^\d]/g, ''))),
     ];
     const minPrice = Math.min(...allPrices);
     const maxPrice = Math.max(...allPrices);
@@ -446,67 +592,104 @@ const Recommendations = () => {
 
     return (
         <Container sx={{ marginTop: "2vh", padding: 3 }} alignitems="center" width="inherit">
-            {/* ✅ Price Slider UI */}
-            <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
-                <Typography variant="h6" gutterBottom>
-                    Filter by Price: ₹{priceRange[0]} - ₹{priceRange[1]}
-                </Typography>
-                <Slider
-                    value={priceRange}
-                    onChange={handlePriceChange}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => `₹${value}`}
-                    min={minPrice}
-                    max={maxPrice}
-                    sx={{
-                        color: '#1976d2',
-                        '& .MuiSlider-rail': { backgroundColor: '#e0e0e0' },
-                        '& .MuiSlider-track': { backgroundColor: '#1976d2' },
-                        '& .MuiSlider-thumb': { backgroundColor: '#1976d2' }
-                    }}
-                />
-            </Box>
+            {/* Border Container */}
+            <Box
+                sx={{
+                    border: '2px solid #1976d2',
+                    borderRadius: '8px',
+                    padding: '20px 0',
+                    position: 'relative',
+                    backgroundColor: '#fff',
+                }}
+            >
+                {/* Content */}
+                <Container sx={{ padding: 3 }}>
+                    <Typography variant="h4" component="div" marginBottom="2vh" textAlign="center" fontWeight="bold">
+                        Your Recommendations
+                    </Typography>
 
-            {/* ✅ Multi-Select Brand Dropdown */}
-            <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
-                <FormLabel component="legend" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                    Filter by Brands:
-                </FormLabel>
-                <Select
-                    multiple
-                    value={selectedBrands}
-                    onChange={handleBrandChange}
-                    input={<OutlinedInput label="Brands" />}
-                    renderValue={(selected) => selected.join(', ')}
-                    fullWidth
-                    sx={{
-                        '& .MuiSelect-root': {
-                            backgroundColor: '#f5f5f5',
-                            borderRadius: '8px',
-                            padding: '10px'
-                        }
-                    }}
-                >
-                    {allBrands.map((brand) => (
-                        <MenuItem key={brand} value={brand}>
-                            <Checkbox checked={selectedBrands.indexOf(brand) > -1} />
-                            <ListItemText primary={brand.charAt(0).toUpperCase() + brand.slice(1)} />
-                        </MenuItem>
+                    {/* ✅ Price Slider UI */}
+                    <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Filter by Price: ₹{priceRange[0]} - ₹{priceRange[1]}
+                        </Typography>
+                        <Slider
+                            value={priceRange}
+                            onChange={handlePriceChange}
+                            valueLabelDisplay="auto"
+                            valueLabelFormat={(value) => `₹${value}`}
+                            min={minPrice}
+                            max={maxPrice}
+                            sx={{
+                                color: '#1976d2',
+                                '& .MuiSlider-rail': { backgroundColor: '#e0e0e0' },
+                                '& .MuiSlider-track': { backgroundColor: '#1976d2' },
+                                '& .MuiSlider-thumb': { backgroundColor: '#1976d2' }
+                            }}
+                        />
+                    </Box>
+
+                    {/* ✅ Multi-Select Brand Dropdown */}
+                    <Box sx={{ width: '80%', margin: "auto", mb: 4 }}>
+                        <FormLabel component="legend" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
+                            Filter by Brands:
+                        </FormLabel>
+                        <Select
+                            multiple
+                            value={selectedBrands}
+                            onChange={handleBrandChange}
+                            input={<OutlinedInput label="Brands" />}
+                            renderValue={(selected) => selected.join(', ')}
+                            fullWidth
+                            sx={{
+                                '& .MuiSelect-root': {
+                                    backgroundColor: '#f5f5f5',
+                                    borderRadius: '8px',
+                                    padding: '10px'
+                                }
+                            }}
+                        >
+                            {allBrands.map((brand) => (
+                                <MenuItem key={brand} value={brand}>
+                                    <Checkbox checked={selectedBrands.indexOf(brand) > -1} />
+                                    <ListItemText primary={brand.charAt(0).toUpperCase() + brand.slice(1)} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
+
+                    {/* ✅ General Products */}
+                    <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
+                        Skin care
+                    </Typography>
+                    {Object.keys(general).map((type) => (
+                        <div key={type}>
+                            <Typography gutterBottom variant="h5" component="div" marginTop="2vh" color="text.secondary" textAlign="center">
+                                {type}
+                            </Typography>
+                            <Grid container spacing={2} justifyContent="center">
+                                {general[type].filter(filterProducts).slice(0, 4).map((prod, index) => (
+                                    <Grid item xs={6} md={3} key={index}>
+                                        <ProductCard
+                                            name={prod.name}
+                                            brand={prod.brand}
+                                            image={prod.img}
+                                            price={prod.price}
+                                            url={prod.url}
+                                            concern={prod.concern}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </div>
                     ))}
-                </Select>
-            </Box>
 
-            {/* ✅ General Products */}
-            <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
-                Skin care
-            </Typography>
-            {Object.keys(general).map((type) => (
-                <div key={type}>
-                    <Typography gutterBottom variant="h5" component="div" marginTop="2vh" color="text.secondary" textAlign="center">
-                        {type}
+                    {/* ✅ Makeup Products */}
+                    <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
+                        Make up
                     </Typography>
                     <Grid container spacing={2} justifyContent="center">
-                        {general[type].filter(filterProducts).slice(0, 4).map((prod, index) => (
+                        {makeup.filter(filterProducts).map((prod, index) => (
                             <Grid item xs={6} md={3} key={index}>
                                 <ProductCard
                                     name={prod.name}
@@ -519,27 +702,8 @@ const Recommendations = () => {
                             </Grid>
                         ))}
                     </Grid>
-                </div>
-            ))}
-
-            {/* ✅ Makeup Products */}
-            <Typography gutterBottom variant="h4" component="div" marginTop="2vh" textAlign="center" fontWeight="bold">
-                Make up
-            </Typography>
-            <Grid container spacing={2} justifyContent="center">
-                {makeup.filter(filterProducts).map((prod, index) => (
-                    <Grid item xs={6} md={3} key={index}>
-                        <ProductCard
-                            name={prod.name}
-                            brand={prod.brand}
-                            image={prod.img}
-                            price={prod.price}
-                            url={prod.url}
-                            concern={prod.concern}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+                </Container>
+            </Box>
         </Container>
     );
 };
